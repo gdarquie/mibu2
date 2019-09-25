@@ -11,10 +11,19 @@ trait BaseEntityTrait
      */
     private $id;
 
+    /**
+     * @ORM\Column(type="string")
+     */
     private $uuid;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private $updatedAt;
 
     /**

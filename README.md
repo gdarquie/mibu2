@@ -1,20 +1,14 @@
-# Plan
+# Travail en cours
 
-Par exemple, si je veux écrire sur Fictio,
-Je crée une fiction (un univers fictionnel)
+##Entités
 
-- universe
-- stori
-- des objets fragments qui peuvent se coller à tout
-
-
-D'abord permettre de créer des fragments à la volée
 - fragment
 - universe
 - customer
 - stories
 
-Créer un CRUD pour les fragments
+##Créer un CRUD pour les fragments
+
 - id
 - createdAt
 - updatedAt
@@ -22,4 +16,8 @@ Créer un CRUD pour les fragments
 
 - content TEXT
 
+## Liste des tâches
 
+- fixtures Fragment
+- Controller CRUD fragement
+- test auto du CRUD Fragment
