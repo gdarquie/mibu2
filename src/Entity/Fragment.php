@@ -16,6 +16,11 @@ class Fragment
      */
     private $content;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $code;
+
     public function getContent(): ?string
     {
         return $this->content;
@@ -27,4 +32,21 @@ class Fragment
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param mixed $code
+     */
+    public function setCode($code): void
+    {
+        $this->code = $code;
+    }
+
 }

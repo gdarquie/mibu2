@@ -19,6 +19,12 @@ Et aussi :
 
 ## Liste des tâches
 
-- fixtures Fragment
+- Pagination Fragments
 - Controller CRUD fragement
+    - Corriger getCollection avec la pagination
+    - Create
+    - Update
+    - Delete
 - test auto du CRUD Fragment
+- Fixtures
+    - ajouter des ids fixes
