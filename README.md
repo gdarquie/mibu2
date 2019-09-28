@@ -1,19 +1,20 @@
 # Travail en cours
 
-##Entités
+## Entités
 
 - fragment
 - universe
 - customer
 - stories
 
-##Créer un CRUD pour les fragments
+## Créer un CRUD pour les fragments
 
 - id
 - createdAt
 - updatedAt
 - uuid
 
+Et aussi :
 - content TEXT
 
 ## Liste des tâches
