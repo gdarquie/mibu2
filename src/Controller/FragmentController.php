@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Component\FragmentManager;
 use App\Entity\Fragment;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -15,14 +17,13 @@ class FragmentController extends AbstractController
     /**
      * @Route("/fragments/{uuid}", name="get_fragment", methods={"GET","HEAD"})
      *
-     * @param EntityManagerInterface $em
      * @param SerializerInterface $serializer
      * @param string $uuid
      * @return Response
      */
-    public function getEntity(EntityManagerInterface $em, SerializerInterface $serializer, string $uuid)
+    public function getEntity(SerializerInterface $serializer, string $uuid)
     {
-        $fragment = $em->getRepository(Fragment::class)->findOneByUuid($uuid);
+        $fragment = $this->getDoctrine()->getRepository(Fragment::class)->findOneBy(['uuid' => $uuid]);
         $fragment = $serializer->serialize($fragment,'json');
 
         return new Response($fragment);
@@ -31,9 +32,9 @@ class FragmentController extends AbstractController
     /**
      * @Route("/fragments", name="get_fragement_collection", methods={"GET"})
      */
-    public function getCollection(EntityManagerInterface $em)
+    public function getCollection()
     {
-        $fragments = $em->getRepository(Fragment::class)->findAll();
+        $fragments = $this->getDoctrine()->getRepository(Fragment::class)->findAll();
         $fragmentsList = [];
         foreach ($fragments as $fragment) {
             $fragmentsList[] = $fragment;
@@ -44,18 +45,22 @@ class FragmentController extends AbstractController
     }
 
     /**
-     * @Route("/fragments/{id}", methods={"POST"})
+     * @Route("/fragments", methods={"POST"})
      */
-    public function createEntity(Request $request)
+    public function createEntity(Request $request, FragmentManager $fragmentManager, SerializerInterface $serializer)
     {
-//        $response = $request->getContent();
-        //create entity
+        $content = json_decode($request->getContent());
 
-        return new Response(true);
+        $fragment = $fragmentManager->create($content);
+        $this->getDoctrine()->getManager()->persist($fragment);
+        $this->getDoctrine()->getManager()->flush();
+
+        $fragment = $serializer->serialize($fragment,'json');
+        return new Response($fragment);
     }
 
     /**
-     * @Route("/fragments", methods={"PUT"})
+     * @Route("/fragments/{uuid}", methods={"PUT"})
      */
     public function updateEntity(Request $request)
     {
@@ -66,9 +71,18 @@ class FragmentController extends AbstractController
     /**
      * @Route("/fragments", methods={"DELETE"})
      */
-    public function deleteEntity(Request $request)
+    public function deleteEntity(Request $request, SerializerInterface $serializer)
     {
-//        $response = $request->getContent();
-        return new Response(true);
+        // get fragment
+        $content = json_decode($request->getContent());
+        if (!$fragment = $this->getDoctrine()->getRepository(Fragment::class)->findOneBy(['uuid' => $content->uuid])){
+            throw new BadRequestHttpException('No fragment with uuid '.$content->uuid.' found!');
+        }
+
+        // delete fragment
+        $this->getDoctrine()->getManager()->remove($fragment);
+        $this->getDoctrine()->getManager()->flush();
+
+        return new JsonResponse('Fragment has been completely destroyed!!');
     }
 }

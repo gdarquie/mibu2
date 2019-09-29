@@ -28,3 +28,5 @@ Et aussi :
 - test auto du CRUD Fragment
 - Fixtures
     - ajouter des ids fixes
+    
+- Installation de Xdebug
