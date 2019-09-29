@@ -11,6 +11,11 @@ use Ramsey\Uuid\Uuid;
  */
 class FragmentManager
 {
+    /**
+     * @param $response
+     * @return Fragment
+     * @throws \Exception
+     */
     public function create($response)
     {
         $fragment = new Fragment();

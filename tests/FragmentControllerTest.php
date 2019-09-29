@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+ use App\Entity\Fragment;
  use Liip\TestFixturesBundle\Test\FixturesTrait;
  use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -70,15 +71,30 @@ class FragmentControllerTest extends WebTestCase
         );
         $this->loadFixtures($fixtures);
 
-        $this->assertTrue(true);
+        //todo : finish test
     }
 
-    public function deleteEntity()
+    public function testDeleteEntity()
     {
         // prepare fixtures
         $fixtures = array(
             'App\DataFixtures\FragmentFixtures',
         );
         $this->loadFixtures($fixtures);
+
+        // initial context
+        static::bootKernel();
+        $em = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $fragments = $em->getRepository(Fragment::class)->findAll();
+        $this->assertCount(11, $fragments);
+
+        // prepare HTTP request to send
+        $data = '{"uuid": "76d3cee3-e3f5-4149-8db6-5dc1d3b58dc4"}';
+        $client = static::createClient();
+        $client->request('DELETE', '/fragments', [], [], [], $data);
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $fragments = $em->getRepository(Fragment::class)->findAll();
+        $this->assertCount(10, $fragments);
+
     }
 }

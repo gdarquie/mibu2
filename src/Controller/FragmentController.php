@@ -36,6 +36,7 @@ class FragmentController extends AbstractController
      */
     public function getCollection()
     {
+        //todo : upgrade this function + use pagination
         $fragments = $this->getDoctrine()->getRepository(Fragment::class)->findAll();
         $fragmentsList = [];
         foreach ($fragments as $fragment) {
@@ -52,6 +53,7 @@ class FragmentController extends AbstractController
      * @param FragmentManager $fragmentManager
      * @param SerializerInterface $serializer
      * @return Response
+     * @throws \Exception
      */
     public function createEntity(Request $request, FragmentManager $fragmentManager, SerializerInterface $serializer)
     {
@@ -69,22 +71,28 @@ class FragmentController extends AbstractController
     }
 
     /**
-     * @Route("/fragments/{uuid}", methods={"PUT"})
+     * @Route("/fragments", methods={"PUT"})
      *
      * @param Request $request
+     * @param FragmentManager $fragmentManager
+     * @param SerializerInterface $serializer
      * @return Response
+     * @throws \Exception
      */
-    public function updateEntity(Request $request)
+    public function updateEntity(Request $request, FragmentManager $fragmentManager, SerializerInterface $serializer)
     {
         // get fragment
         $content = json_decode($request->getContent());
         $fragment = $this->findFragment('uuid', $content->uuid);
 
+        // hydrate entity
+        $fragment = $fragmentManager->create($content);
+
         // update fragment
         $this->getDoctrine()->getManager()->persist($fragment);
         $this->getDoctrine()->getManager()->flush();
 
-        return new Response(true);
+        return new Response($serializer->serialize($fragment,'json'));
     }
 
     /**
