@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Component\FragmentManager;
 use App\Entity\Fragment;
+use App\Repository\FragmentRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,16 +36,22 @@ class FragmentController extends AbstractController
      *
      * @return Response
      */
-    public function getCollection()
+    public function getCollection(FragmentRepository $repository, Request $request, PaginatorInterface $paginator, SerializerInterface $serializer)
     {
-        //todo : upgrade this function + use pagination
-        $fragments = $this->getDoctrine()->getRepository(Fragment::class)->findAll();
-        $fragmentsList = [];
-        foreach ($fragments as $fragment) {
-            $fragmentsList[] = $fragment;
+        //todo : upgrade this function with https://symfonycasts.com/screencast/symfony-rest3/pagerfanta-pagination
+        $queryBuilder = $repository->getWithSearchQueryBuilder();
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        $fragments = [];
+        foreach ($pagination->getItems() as $fragment) {
+            $fragments[] = $fragment;
         }
 
-        return new Response(json_encode($fragmentsList));
+        return new Response($serializer->serialize($fragments, 'json'));
     }
 
     /**

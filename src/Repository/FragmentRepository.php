@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Fragment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Fragment|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +20,10 @@ class FragmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Fragment::class);
     }
 
-    // /**
-    //  * @return Fragment[] Returns an array of Fragment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getWithSearchQueryBuilder(): QueryBuilder
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('f');
+        return $qb;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Fragment
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
