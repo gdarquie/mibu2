@@ -80,8 +80,5 @@ class FragmentControllerTest extends WebTestCase
             'App\DataFixtures\FragmentFixtures',
         );
         $this->loadFixtures($fixtures);
-//        $this->assertCount(10);
-
-        $this->assertTrue(true);
     }
 }
