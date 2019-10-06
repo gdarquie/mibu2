@@ -22,7 +22,9 @@ class FragmentRepository extends ServiceEntityRepository
 
     public function getWithSearchQueryBuilder(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('f');
+        $qb = $this->createQueryBuilder('f')
+            ->orderBy('f.id', 'DESC')
+        ;
         return $qb;
     }
 

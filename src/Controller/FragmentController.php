@@ -55,7 +55,7 @@ class FragmentController extends AbstractController
     }
 
     /**
-     * @Route("/fragments", methods={"POST"})
+     * @Route("/fragments", name="create_entity", methods={"POST"})
      *
      * @param Request $request
      * @param FragmentManager $fragmentManager
@@ -94,7 +94,7 @@ class FragmentController extends AbstractController
         $fragment = $this->findFragment('uuid', $content->uuid);
 
         // hydrate entity
-        $fragment = $fragmentManager->create($content);
+        $fragment->setContent($content->content);
 
         // update fragment
         $this->getDoctrine()->getManager()->persist($fragment);
