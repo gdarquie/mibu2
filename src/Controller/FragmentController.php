@@ -43,7 +43,7 @@ class FragmentController extends AbstractController
         $pagination = $paginator->paginate(
             $queryBuilder,
             $request->query->getInt('page', 1),
-            10
+            30
         );
 
         $fragments = [];

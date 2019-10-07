@@ -22,4 +22,5 @@
 ###> Custom ###
 .idea
 .env
+.DS_Store
 ###< Custom ###

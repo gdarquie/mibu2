@@ -3,6 +3,7 @@
 namespace App\Component;
 
 use App\Entity\Fragment;
+use App\Repository\FragmentRepository;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -30,5 +31,13 @@ class FragmentManager
         $fragment->setCode('FRAG_'.$uniqid);
 
         return $fragment;
+    }
+
+    /**
+     * @param FragmentRepository $fragmentRepository
+     * @return Fragment[]
+     */
+    public function getFragmentsCollection(FragmentRepository $fragmentRepository) {
+        return $fragmentRepository->findAll();
     }
 }
